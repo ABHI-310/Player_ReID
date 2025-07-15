@@ -1,0 +1,71 @@
+**Player Re-Identification Project Report**
+
+---
+
+### Project Title:
+
+**Cross-Camera Football Player Re-Identification using Appearance-Based Features**
+
+### Objective:
+
+To identify and maintain consistent player IDs across multiple camera feeds (broadcast and tacticam) in a football match scenario using appearance-based embeddings.
+
+### Approach Summary:
+
+1. **Detection and Tracking**:
+
+   * Used BoT-SORT tracker on both broadcast and tacticam videos to generate detection labels.
+   * Labels were in YOLO format and stored in structured directories.
+
+2. **Crop Extraction**:
+
+   * For each tracked player, cropped images were extracted from video frames using bounding box coordinates.
+   * Separate crops were saved in per-tracklet folders for both broadcast and tacticam views.
+
+3. **Appearance Embedding Extraction**:
+
+   * Torchreid was installed manually (despite deprecation warnings).
+   * A lightweight model, ResNet-50 (from Torchreid), was used due to limited compute.
+   * Embeddings for each player tracklet were computed by averaging the features of all images in the tracklet.
+
+4. **Matching Across Views**:
+
+   * Cosine similarity was computed between broadcast and tacticam embeddings.
+   * The most similar tacticam embedding was matched for each broadcast tracklet.
+   * Final match results were exported to a CSV file.
+
+---
+
+### Challenges Faced:
+
+* **GPU Constraints**:
+
+  * Could not use high-capacity models like TransReID or perform re-ranking and advanced spatiotemporal modeling.
+* **Visual Noise**:
+
+  * A few cropped images contained background-only patches due to misaligned bounding boxes.
+  * Visual verification was attempted but omitted from the final result due to inconsistencies.
+
+### Learning and Takeaways:
+
+* Understood pipeline of player re-identification from raw video to appearance-based matching.
+* Gained hands-on experience in video frame decoding, crop generation, and Torchreid embeddings.
+* Balanced model choice with hardware limitations to ensure a working baseline.
+
+### Preparedness for Internship:
+
+During this assignment, I encountered real-world challenges like limited compute and deprecated libraries. I worked around them by simplifying the pipeline while maintaining functionality.
+
+That said, the limitations were temporary. I’ll be transitioning to a higher-spec Mac system next week, allowing me to confidently contribute to the internship without hardware bottlenecks. This means I’ll be ready to experiment with more demanding models like TransReID or integrate spatiotemporal and multi-modal fusion techniques without constraint.
+
+---
+
+### Final Output:
+
+* `matches.csv`: Broadcast to tacticam identity mapping.
+* Cropped images and extracted embeddings stored and organized for reproducibility.
+* Notebooks structured clearly to facilitate step-wise review and reruns.
+
+---
+
+**End of Report**
