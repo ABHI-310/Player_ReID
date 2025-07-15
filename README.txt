@@ -1,78 +1,71 @@
-**README.md**
+# ⚽ Player Re-Identification Assignment
 
-# Player Re-Identification Assignment
+## 🧠 Objective
 
-## Overview
-
-This project tackles the challenge of player re-identification across different camera views in a football match setting. It aims to ensure consistent player identity even as players move between the broadcast and tacticam footage.
-
-## Folder Structure
-
-```
-.
-├── botsort_broadcast/         # BoT-SORT tracking results on broadcast video
-├── botsort_tacticam/          # BoT-SORT tracking results on tacticam video
-├── Output/                    # Extracted player crops from both cameras
-├── Embeddings/                # Saved embeddings for each tracklet
-├── TrackletEmbeddings/        # Optionally used during experimentation
-├── Visual_Matches/            # (Empty) Placeholder for visual verification
-├── extract_tracklets.ipynb    # Tracking + crop extraction
-├── extract_embeddings.ipynb   # Embedding extraction from cropped images
-├── appearance_script.ipynb    # Final matching using appearance features
-├── matches.csv                # Final matching result between broadcast and tacticam
-├── broadcast.mp4 / .avi       # Broadcast video
-├── tacticam.mp4 / .avi        # Tacticam video
-├── README.md                  # This file
-├── requirements.txt           # Python dependencies
-```
-
-## Setup Instructions
-
-1. **Install dependencies:**
-
-```bash
-pip install -r requirements.txt
-```
-
-2. **Run the following notebooks in order:**
-
-   * `extract_tracklets.ipynb`: Uses BoT-SORT labels + videos to extract player crops
-   * `extract_embeddings.ipynb`: Uses Torchreid (ResNet-50) to extract embeddings
-   * `appearance_script.ipynb`: Matches players across cameras using cosine similarity
-
-3. **Output:**
-
-   * Player crops saved in `Output/`
-   * Embeddings saved in `Embeddings/`
-   * Final matches in `matches.csv`
-
-## Notes
-
-* Due to lack of GPU, heavier models like TransReID were not used.
-* Torchreid was installed manually due to a deprecation warning.
-* Preprocessing, cropping, and matching were all optimised for correctness and reproducibility.
-
-## Known Limitations
-
-* A few cropped images contained background noise due to detection inaccuracy.
-* Visual\_Matches folder remains unused due to incorrect results during visualization.
-
-## Note on Hardware Availability
-
-During the assignment, I faced certain limitations due to lack of access to high-end hardware (specifically GPU support), which influenced my choice of models and methods. However, this constraint was temporary — I’ll be switching to a new mac with significantly better capabilities by next week.
-
-With this upgrade, I’ll be fully equipped to work efficiently and independently throughout the internship, including handling more comput-intensive models and experiments without interruption.
+This project addresses the challenge of player re-identification across multiple camera feeds — specifically broadcast and tacticam footage from a football match. The goal is to assign consistent IDs to players, even as they move between camera views or exit the frame.
 
 ---
 
-**requirements.txt**
+## 📂 Folder Structure
+├── botsort_broadcast/ # BoT-SORT output on broadcast video
+├── botsort_tacticam/ # BoT-SORT output on tacticam video
+├── Output/ # Cropped player images (per tracklet)
+├── Embeddings/ # ResNet50 feature vectors for each crop
+├── TrackletEmbeddings/ # (Optional) Experimental stage results
+├── Visual_Matches/ # (Unused) For visual re-ID verification
+├── extract_tracklets.ipynb # Crop extraction based on BoT-SORT + video
+├── extract_embeddings.ipynb # Feature extraction using Torchreid
+├── appearance_script.ipynb # Re-ID: Appearance-based matching (cosine sim)
+├── matches.csv # Final match results (broadcast ↔ tacticam)
+├── broadcast.mp4 / .avi # Broadcast camera footage
+├── tacticam.mp4 / .avi # Tacticam footage
+├── README.md # You're here
+├── requirements.txt # All dependencies
 
-```
+Run the pipeline notebooks sequentially:
+
+extract_tracklets.ipynb
+→ Parses BoT-SORT labels & extracts player crops from both videos.
+
+extract_embeddings.ipynb
+→ Uses Torchreid + ResNet-50 to extract appearance embeddings.
+
+appearance_script.ipynb
+→ Matches players across views using cosine similarity.
+
+Key Outputs:
+
+Crops saved in Output/
+
+Embeddings in Embeddings/
+
+Final re-ID results in matches.csv
+
+📌 Key Notes
+Lightweight models were chosen (e.g., ResNet-50 via Torchreid) due to hardware constraints, ensuring the pipeline remains efficient and reproducible.
+
+Torchreid was manually installed due to a pip deprecation warning.
+
+The Visual_Matches directory was set up for visual inspection but left unused due to inaccurate early-stage overlay results.
+
+❗ Known Limitations
+Some cropped images include partial background or occlusion due to imperfect detection bounding boxes.
+
+The visual inspection phase remains incomplete; re-ID is evaluated only via embeddings and cosine similarity.
+
+💻 On Hardware Availability
+This project was implemented without access to a dedicated GPU, influencing the selection of lightweight, CPU-friendly architectures. However, this was a temporary limitation — I’ll be switching to a MacBook Pro with enhanced compute capacity (M-series + SSD) next week.
+
+As we advance, I’ll be fully equipped to handle deep re-ID models (e.g., TransReID, ViT) and more compute-intensive experimentation for deployment-grade pipelines.
+
+✅ Requirements
 torch==2.0.1
+torchvision
+torchreid
 opencv-python
 tqdm
 numpy
 pillow
-torchreid
-torchvision
-```
+
+👀 Final Remark
+This solution prioritises correctness, reproducibility, and modularity, making it straightforward to extend or upgrade individual components (e.g., switching feature extractor models or integrating tracklet stitching).
